@@ -92,13 +92,14 @@ int main(int argc, char *argv[])
     // iterate over infile's scanlines
     for (int i = 0, biHeight = abs(oldHeight); i < biHeight; i++)
     {
+        int j;
         // temporary storage
             RGBTRIPLE triple;
         for (int z = 0; z < factor - 1; z++)
         {
 
         // iterate over pixels in scanline
-        for (int j = 0; j < oldWidth; j++)
+        for (j = 0; j < oldWidth; j++)
         {
 
 
@@ -124,7 +125,7 @@ int main(int argc, char *argv[])
             fputc(0x00, outptr);
         }
 
-        fseek(inptr, padding, SEEK_CUR);
+        fseek(inptr, -1 * sizeof(RGBTRIPLE) * j, SEEK_CUR);
         }
         for (int y = 0; y < oldWidth; y++)
         {
@@ -138,7 +139,6 @@ int main(int argc, char *argv[])
                 fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
             }
         }
-
 
         // then add it back (to demonstrate how)
         for (int k = 0; k < newPadding; k++)
