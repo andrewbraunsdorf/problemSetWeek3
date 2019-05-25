@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     if (factor <= 0 || factor > 100)
     {
         printf("Usage: resize n infile outfile\n");
-        return 2;
+        return 1;
     }
 
     // // remember filenames
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     int newWidth = bi.biWidth * factor;
     int newHeight = bi.biHeight * factor;
 
-     // determine padding for scanlines
+    // determine padding for scanlines
     int padding = (4 - (oldWidth * sizeof(RGBTRIPLE)) % 4) % 4;
     int newPadding = (4 - (newWidth * sizeof(RGBTRIPLE)) % 4) % 4;
 
@@ -79,9 +79,7 @@ int main(int argc, char *argv[])
     bi.biWidth = newWidth;
     bi.biSizeImage = ((sizeof(RGBTRIPLE) * newWidth) + newPadding) * abs(newHeight);
     bf.bfSize = bi.biSizeImage + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
-    // sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER = 54 = 14+
-
-
+    // sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER = 54
 
     // write outfile's BITMAPFILEHEADER
     fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);
@@ -99,6 +97,7 @@ int main(int argc, char *argv[])
         RGBTRIPLE triple;
         for (int z = 0; z < factor - 1; z++)
         {
+
             // iterate over pixels in scanline
             for (j = 0; j < oldWidth; j++)
             {
@@ -117,6 +116,10 @@ int main(int argc, char *argv[])
                     fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
                 }
             }
+
+
+
+            // then add it back (to demonstrate how)
             for (int k = 0; k < newPadding; k++)
             {
                 fputc(0x00, outptr);
@@ -137,14 +140,13 @@ int main(int argc, char *argv[])
             }
         }
 
-
         // then add it back (to demonstrate how)
         for (int k = 0; k < newPadding; k++)
         {
             fputc(0x00, outptr);
         }
         // skip over padding, if any
-    fseek(inptr, padding, SEEK_CUR);
+        fseek(inptr, padding, SEEK_CUR);
     }
 
     // close infile
