@@ -1,0 +1,3 @@
+how do we set fseek...I want it to go back to the beginning of the line to print out x times
+
+how can we use the debugger in the file?
