@@ -1,0 +1,25 @@
+Recover.c
+ For (iterate through each file ending after complete)
+	Name each file as ###.jpg iterate from 000 +1
+	At each 0xff 0xd8 0xff, it should be a new file
+Each block is 512 bytes (4096 bits)
+1 byte = 8 bits
+Read every 512 bytes… if first 4 are equal to 0xff 0xd8 0xff. if not go on to the next block… if the first 4 blocks == 0xff 0xd8 0xff and 4th block, then that should become a new file,
+Continue reading in until another blow that indicates another jpeg, Close previous and open next.
+Use fread function: one way is to read files in 512 blocks another way is read one block at a time for 512 blocks
+If read wise operator
+
+If this code returns as true then you found a jpeg
+Use sprint to create a new file name for our jpeg
+Open using fopen and include writing permissions
+Write 512 bytes as a time
+
+Fwrite( data, size, number)
+Where the 512 points are and then the file where the bytes should be written to
+
+Can no read and write… how do we stop?
+Last block will not contain 512 bytes…it will be shorter than that
+Find condition when we read in successfully for the 512 bytes and when we reach the end of the file.
+
+
+0xff 0xd8 0xff indicate jpeg header
