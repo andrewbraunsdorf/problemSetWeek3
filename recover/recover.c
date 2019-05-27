@@ -32,11 +32,13 @@ int main(int argc, char *argv[])
     // // sprintf(filename, "%03i.jpg", fileNumber)
 
     // //need a while loop because we read through the blocks of 512 until end of file... aka completion
-    // while(fread(&buffer, 1, 512, inptr) == 1)
-    while (feof(inptr) == 0)
+    while (fread(&buffer, 512, 1, inptr) == 1)
+
+        // // added something to image 049.jpg
+        // while (feof(inptr) == 0)
     {
         // FILE *outptr = fopen(imageName, "w");
-        fread(&buffer, 1, 512, inptr);
+        // fread(&buffer, 512, 1, inptr);
 
         if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
         {
@@ -48,7 +50,7 @@ int main(int argc, char *argv[])
             // fread(&buffer, 1, 512, inptr);
             sprintf(imageName, "%03i.jpg", fileNumber);
             outptr = fopen(imageName, "w");
-            fwrite(&buffer, 1, 512, outptr);
+            fwrite(&buffer, 512, 1, outptr);
 
             // printf("%i\n", fileNumber);
 
@@ -56,6 +58,7 @@ int main(int argc, char *argv[])
             fileNumber++;
         }
         else if (fileNumber > 0)
+            // while(fread(&buffer, 1, 512 ,inptr) == 1)
         {
             fwrite(buffer, 1, 512, outptr);
         }
@@ -84,6 +87,7 @@ int main(int argc, char *argv[])
     // }
 
     printf("Completed While Loop!\n");
+    return 0;
 }
 
 // // somewhere need to increment filenumber++; to add another # to each file
