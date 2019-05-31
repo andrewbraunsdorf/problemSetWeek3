@@ -92,16 +92,16 @@ int main(int argc, char *argv[])
     // iterate over infile's scanlines
     for (int i = 0, biHeight = abs(oldHeight); i < biHeight; i++)
     {
-        int j;
-        // temporary storage
-        RGBTRIPLE triple;
-        for (int z = 0; z < factor - 1; z++)
+
+
+        for (int z = 0; z < factor; z++)
         {
 
             // iterate over pixels in scanline
-            for (j = 0; j < oldWidth; j++)
+            for (int j = 0; j < oldWidth; j++)
             {
-
+                // temporary storage
+                RGBTRIPLE triple;
 
                 // read RGB triple from infile
                 fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
@@ -116,7 +116,8 @@ int main(int argc, char *argv[])
                     fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
                 }
             }
-
+            // skips over padding if any
+            fseek(inptr, padding, SEEK_CUR);
 
 
             // then add it back (to demonstrate how)
@@ -125,28 +126,12 @@ int main(int argc, char *argv[])
                 fputc(0x00, outptr);
             }
 
-            fseek(inptr, -1 * sizeof(RGBTRIPLE) * j, SEEK_CUR);
-        }
-        for (int y = 0; y < oldWidth; y++)
-        {
-
-            // read RGB triple from infile
-            fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
-
-            for (int l = 0; l < factor; l++)
+            // moves cursor back and iterates factor number of times on row
+            if (z < factor -1)
             {
-                // write RGB triple to outfile
-                fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
+                fseek(inptr, -1 * ((oldWidth * sizeof(RGBTRIPLE)) + padding), SEEK_CUR);
             }
         }
-
-        // then add it back (to demonstrate how)
-        for (int k = 0; k < newPadding; k++)
-        {
-            fputc(0x00, outptr);
-        }
-        // skip over padding, if any
-        fseek(inptr, padding, SEEK_CUR);
     }
 
     // close infile
