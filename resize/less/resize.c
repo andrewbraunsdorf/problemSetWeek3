@@ -7,15 +7,12 @@
 
 int main(int argc, char *argv[])
 {
-
     // ensure proper usage
     if (argc != 4)
     {
         printf("Usage: resize n infile outfile\n");
         return 1;
     }
-
-
 
     int factor = atoi(argv[1]);
     // try once completed
@@ -64,7 +61,6 @@ int main(int argc, char *argv[])
         return 4;
     }
 
-
     int oldWidth = bi.biWidth;
     int oldHeight = bi.biHeight;
     int newWidth = bi.biWidth * factor;
@@ -87,16 +83,11 @@ int main(int argc, char *argv[])
     // write outfile's BITMAPINFOHEADER
     fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
 
-
-
     // iterate over infile's scanlines
     for (int i = 0, biHeight = abs(oldHeight); i < biHeight; i++)
     {
-
-
         for (int z = 0; z < factor; z++)
         {
-
             // iterate over pixels in scanline
             for (int j = 0; j < oldWidth; j++)
             {
@@ -118,7 +109,6 @@ int main(int argc, char *argv[])
             }
             // skips over padding if any
             fseek(inptr, padding, SEEK_CUR);
-
 
             // then add it back (to demonstrate how)
             for (int k = 0; k < newPadding; k++)
